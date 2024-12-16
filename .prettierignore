@@ -1,0 +1,31 @@
+
+# Ignore node_modules directory
+node_modules
+
+# Ignore build directories
+dist
+build
+out
+
+# Ignore environment files
+.env
+
+# Ignore coverage directories
+coverage
+
+# Ignore minified files
+*.min.js
+
+# Ignore public and static files
+public
+static
+
+# Ignore Markdown files
+*.md
+
+# Ignore documentation
+docs
+
+# Ignore specific legacy files
+src/legacy/file1.js
+src/legacy/file2.js
