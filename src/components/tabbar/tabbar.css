@@ -1,0 +1,44 @@
+.nav {
+  --height: 80px;
+  --radius: calc(var(--height) / 2);
+
+  display: flex;
+  gap: clamp(1em, 2em, 3em);
+  position: fixed;
+  bottom: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 1em 2em;
+  background-color: black;
+  height: var(--height);
+  border-radius: var(--radius);
+
+  a {
+    text-decoration: none;
+  }
+
+  .nav__link {
+    display: grid;
+    justify-items: center;
+    row-gap: 0.5em;
+    color: white;
+
+    &:focus {
+      outline: none;
+      .nav__icon,
+      .nav__text {
+        color: #e8195d;
+        transform: scale(1.2);
+        transition: 0.25s ease-in-out;
+      }
+    }
+    &:hover {
+      color: #e8195d;
+      transition: 0.25s ease-in-out;
+    }
+  }
+
+  .nav__icon {
+    font-size: 1.5rem;
+  }
+}
