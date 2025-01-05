@@ -1,0 +1,31 @@
+.header {
+  display: flex;
+  /* flex-wrap: wrap; */
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.75em 1.5em;
+  background-color: #130a30;
+  gap: 1em;
+
+  .header-link {
+    color: #dce7fb;
+    margin-left: 1em;
+  }
+}
+
+.logo-link {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  /* border: 2px solid red; */
+
+  .logo__image {
+    width: 100px;
+    /* border: 1px solid green; */
+  }
+  .logo__heading {
+    font-size: 1.5rem;
+    color: #dce7fb;
+  }
+}
