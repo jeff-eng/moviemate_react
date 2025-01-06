@@ -23,12 +23,12 @@
     row-gap: 0.5em;
     color: white;
 
-    &:focus {
+    &:focus-visible {
       outline: none;
+
       .nav__icon,
       .nav__text {
-        color: #e8195d;
-        transform: scale(1.2);
+        outline: 2px solid aqua;
         transition: 0.25s ease-in-out;
       }
     }
@@ -41,4 +41,10 @@
   .nav__icon {
     font-size: 1.5rem;
   }
+}
+
+/* Active style for tab bar icon and label */
+.nav__link--active .nav__icon,
+.nav__link--active .nav__label {
+  color: #e8195d;
 }
