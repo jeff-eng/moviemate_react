@@ -1,20 +1,15 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import './home.css';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import MovieResult from '../../components/movie/MovieResult';
+import TVResult from '../../components/tv/TVResult';
+import PersonResult from '../../components/person/PersonResult';
 
 export default function Home() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState({});
   const [pageNumber, setPageNumber] = useState(1);
-
-  function handleSearchInputChange(event) {
-    const searchInputValue = event.target.value;
-
-    // Sanitize input - trim leading and trailing whitespace
-
-    setSearchQuery(searchInputValue);
-  }
+  const searchQueryRef = useRef('');
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -30,6 +25,7 @@ export default function Home() {
 
     const queryString = new URLSearchParams(formData).toString();
     const updatedQueryString = queryString.replace(/\+/g, '%20');
+    const urlString = `https://api.themoviedb.org/3/search/multi?${updatedQueryString}&include_adult=false&language=en-US&page=${pageNumber}`;
 
     const options = {
       method: 'GET',
@@ -40,17 +36,31 @@ export default function Home() {
     };
 
     try {
-      const response = await fetch(
-        `https://api.themoviedb.org/3/search/multi?${updatedQueryString}&include_adult=false&language=en-US&page=${pageNumber}`,
-        options,
-      );
-
+      const response = await fetch(urlString, options);
       const data = await response.json();
-      console.log(data.results);
-      setResults(data.results);
+      const sortedResults = sortResults(data.results);
+      setResults(sortedResults);
     } catch (err) {
       console.error(err);
     }
+  }
+
+  function sortResults(searchResults) {
+    return Object.groupBy(searchResults, ({ media_type }) => media_type);
+  }
+
+  function renderResults(searchResults) {
+    return Object.values(searchResults)
+      .flat()
+      .map(result => {
+        if (result.media_type === 'movie') {
+          return <MovieResult key={result.id} data={result} />;
+        } else if (result.media_type === 'tv') {
+          return <TVResult key={result.id} data={result} />;
+        } else if (result.media_type === 'person') {
+          return <PersonResult key={result.id} data={result} />;
+        }
+      });
   }
 
   return (
@@ -61,21 +71,15 @@ export default function Home() {
             type="search"
             name="query"
             placeholder="e.g. Game of Thrones"
-            onChange={handleSearchInputChange}
-            value={searchQuery}
+            ref={searchQueryRef}
+            defaultValue=""
           />
           <button>
             <FontAwesomeIcon icon={faMagnifyingGlass} />
           </button>
         </form>
       </search>
-      <main>
-        {results.map((result, index) => (
-          <>
-            <h3 key={index}>{result.title}</h3>
-          </>
-        ))}
-      </main>
+      <main>{results && renderResults(results)}</main>
     </>
   );
 }
