@@ -1,15 +1,20 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import './home.css';
-import { useState, useRef } from 'react';
+import { useState, useContext } from 'react';
 import MovieResult from '../../components/movie/MovieResult';
 import TVResult from '../../components/tv/TVResult';
 import PersonResult from '../../components/person/PersonResult';
+import { AppContext } from '../../components/App';
+import './home.css';
 
 export default function Home() {
-  const [results, setResults] = useState({});
+  const { results, setResults, searchQuery, setSearchQuery } =
+    useContext(AppContext);
   const [pageNumber, setPageNumber] = useState(1);
-  const searchQueryRef = useRef('');
+
+  function handleChange(event) {
+    setSearchQuery(event.target.value);
+  }
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -38,15 +43,15 @@ export default function Home() {
     try {
       const response = await fetch(urlString, options);
       const data = await response.json();
-      const sortedResults = sortResults(data.results);
+      // Sorts results into an object (keys = tv, movie, person; values = array of results for each category)
+      const sortedResults = Object.groupBy(
+        data.results,
+        ({ media_type }) => media_type,
+      );
       setResults(sortedResults);
     } catch (err) {
       console.error(err);
     }
-  }
-
-  function sortResults(searchResults) {
-    return Object.groupBy(searchResults, ({ media_type }) => media_type);
   }
 
   function renderResults(searchResults) {
@@ -71,8 +76,8 @@ export default function Home() {
             type="search"
             name="query"
             placeholder="e.g. Game of Thrones"
-            ref={searchQueryRef}
-            defaultValue=""
+            onChange={handleChange}
+            value={searchQuery}
           />
           <button>
             <FontAwesomeIcon icon={faMagnifyingGlass} />
