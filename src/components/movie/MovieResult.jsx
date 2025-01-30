@@ -1,4 +1,4 @@
-import { faStar } from '@fortawesome/free-solid-svg-icons';
+import { faStar, faClapperboard } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import posterPlaceholder from '../../assets/imgholdr-image.png';
 
@@ -25,11 +25,16 @@ export default function MovieResult({ data }) {
           {data.title}
           <time className="search-result__release-year"> ({releaseYear})</time>
         </h2>
-        <span className="search-result__type">Movie</span>
-        <span className="search-result__rating">
-          <FontAwesomeIcon icon={faStar} />
-          {data.vote_average}
-        </span>
+        <div>
+          <span className="search-result__type">
+            <FontAwesomeIcon icon={faClapperboard} className="result-type" />
+            Movie
+          </span>
+          <span className="search-result__rating">
+            <FontAwesomeIcon icon={faStar} className="star-icon" />
+            {data.vote_average.toFixed(1)}
+          </span>
+        </div>
         <p className="search-result__text">{data.overview}</p>
       </div>
     </article>
