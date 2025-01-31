@@ -57,7 +57,7 @@ export default function Home() {
   function renderResults(searchResults) {
     return Object.values(searchResults)
       .flat()
-      .map(result => {
+      .map((result, index) => {
         if (result.media_type === 'movie') {
           return <MovieResult key={result.id} data={result} />;
         } else if (result.media_type === 'tv') {
@@ -84,7 +84,7 @@ export default function Home() {
           </button>
         </form>
       </search>
-      <main>{results && renderResults(results)}</main>
+      <main className="results">{results && renderResults(results)}</main>
     </>
   );
 }
