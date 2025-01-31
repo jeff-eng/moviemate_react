@@ -1,0 +1,13 @@
+.results {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1.5em;
+  padding: 2em 2em 8em;
+}
+
+@media (min-width: 850px) {
+  .results {
+    grid-auto-columns: 500px;
+  }
+}

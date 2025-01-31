@@ -1,7 +1,10 @@
-import './TVResult.css';
+import { faStar, faTv } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import posterPlaceholder from '../../assets/imgholdr-image.png';
 
 export default function TVResult({ data }) {
-  const releaseYear = data.release_date.split('-')[0];
+  const releaseYear = data.first_air_date.split('-')[0];
+
   const poster = data.poster_path
     ? `https://image.tmdb.org/t/p/w500${data.poster_path}`
     : posterPlaceholder;
@@ -21,11 +24,16 @@ export default function TVResult({ data }) {
           {data.name}
           <time className="search-result__release-year"> ({releaseYear})</time>
         </h2>
-        <span className="search-result__type">TV Series</span>
-        <span className="search-result__rating">
-          <FontAwesomeIcon icon={faStar} />
-          {data.vote_average}
-        </span>
+        <div>
+          <span className="search-result__type">
+            <FontAwesomeIcon icon={faTv} className="result-type" />
+            TV Series
+          </span>
+          <span className="search-result__rating">
+            <FontAwesomeIcon icon={faStar} className="star-icon" />
+            {data.vote_average.toFixed(1)}
+          </span>
+        </div>
         <p className="search-result__text">{data.overview}</p>
       </div>
     </article>

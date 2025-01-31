@@ -5,6 +5,7 @@ import Watchlist from '../pages/watchlist/Watchlist';
 import Account from '../pages/account/Account';
 import MainLayout from './mainlayout/MainLayout';
 import './App.css';
+import './styles/searchresult.css';
 
 const AppContext = createContext();
 
