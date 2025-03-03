@@ -3,7 +3,7 @@ import { Outlet, useParams, NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock } from '@fortawesome/free-regular-svg-icons';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
-import '../../pages/detail/detail.css';
+import '../detail/detail.css';
 
 export default function MovieLayout() {
   const { id } = useParams();
