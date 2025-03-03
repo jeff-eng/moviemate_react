@@ -24,6 +24,7 @@ export default function MovieLayout() {
     },
   };
 
+  // Fetch Movie info details
   useEffect(() => {
     if (!movieDetailsUrl) return;
 
@@ -50,6 +51,7 @@ export default function MovieLayout() {
     fetchMovieData();
   }, [id]);
 
+  // Fetch Cast and Crew info
   useEffect(() => {
     if (!movieCastAndCrewUrl) return;
 
