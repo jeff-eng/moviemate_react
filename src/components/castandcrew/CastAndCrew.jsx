@@ -18,16 +18,16 @@ export default function CastAndCrew() {
 
   function renderCrew(obj) {
     return Object.entries(obj).map(([key, value]) => {
-      console.log(key);
-      console.log(value);
-
       return (
-        <details className="crew-section">
+        <details key={key} className="crew-section">
           <summary className="crew-section__dept">{key}</summary>
           <div className="crewmembers-container">
-            {value.map(val => {
+            {value.map((val, index) => {
               return (
-                <div className="crewmember-wrapper">
+                <div
+                  key={`crew-${val.id}-${index}`}
+                  className="crewmember-wrapper"
+                >
                   <p className="crew-section__name">{val.name}</p>
                   <p className="crew-section__job">{val.job}</p>
                 </div>
