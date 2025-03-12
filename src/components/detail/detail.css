@@ -22,9 +22,9 @@
 }
 
 .movie-header__poster {
-  width: clamp(125px, 20vw, 175px);
+  width: clamp(160px, 20vw, 175px);
   height: auto;
-  border-radius: 10px;
+  border-radius: 0.5em;
 }
 
 .movie-header__title {
@@ -45,6 +45,16 @@
   display: flex;
   gap: 1em;
   color: #84a7f2;
+}
+
+.description-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+
+  .description-list__term {
+    font-weight: 800;
+  }
 }
 
 .genre-list {
@@ -181,4 +191,63 @@
   .crew-section__job {
     color: #84a7f2;
   }
+}
+
+.series {
+  display: grid;
+  row-gap: 2em;
+  margin-top: 1em;
+}
+
+.seasons-heading {
+  padding-top: 1em;
+}
+
+.series__season {
+  /* border: 2px solid red; */
+  display: grid;
+  grid-template-columns: 125px 3fr;
+  grid-template-areas:
+    'poster header episode-count'
+    'poster desc   desc'
+    'poster desc   desc';
+  column-gap: 1em;
+  row-gap: 0.5em;
+  align-items: stretch;
+
+  .series__season-poster {
+    max-width: auto;
+    height: 175px;
+    border-radius: 0.5em;
+  }
+
+  .series__season-description {
+    font-size: 0.9rem;
+    opacity: 75%;
+    /* font-style: italic; */
+  }
+
+  .series__season-year {
+    margin-left: 0.25em;
+  }
+}
+
+.season-poster {
+  grid-area: poster;
+}
+
+.season-header {
+  grid-area: header;
+}
+
+.season-info {
+  grid-area: info;
+}
+
+.season-episode-count {
+  grid-area: episode-count;
+}
+
+.season-description {
+  grid-area: desc;
 }
