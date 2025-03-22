@@ -1,0 +1,55 @@
+.person-main {
+  --img-border-radius: 0.5em;
+  min-width: 350px;
+  max-width: 700px;
+  margin: auto auto;
+
+  padding: 2em 1em;
+  margin-bottom: 8em;
+
+  .person-header__upper {
+    display: grid;
+    grid-template-columns: max-content;
+    grid-template-rows: 50px auto;
+    column-gap: 1em;
+    grid-template-areas:
+      'profile-img name'
+      'profile-img info';
+  }
+
+  .person-header__heading {
+    font-size: clamp(1.5rem, 5vw, 2rem);
+    grid-area: name;
+  }
+
+  .person-header__image {
+    grid-area: profile-img;
+    border-radius: var(--img-border-radius);
+    width: clamp(150px, 20vw, 350px);
+    height: auto;
+  }
+
+  .person-header__description-list {
+    grid-area: info;
+  }
+}
+
+.person-bio {
+  grid-area: bio;
+  margin-top: 2em;
+  line-height: 1.5em;
+}
+
+.person-header__description-list {
+  grid-area: desc;
+  color: #84a7f2;
+  font-size: 0.8rem;
+}
+
+.description-list__term {
+  font-weight: 800;
+}
+
+.description-list__desc:not(:last-child) {
+  margin-bottom: 1em;
+}
