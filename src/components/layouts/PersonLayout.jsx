@@ -1,1447 +1,256 @@
-import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useEffect, useState, Fragment } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import { formatDate } from '../../functions/function';
+import { faStar, faTv } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { getReleaseYear } from '../../functions/function';
 import './personlayout.css';
 
 export default function PersonLayout() {
   const { id } = useParams();
-
-  const [personData, setPersonData] = useState({});
-
-  const data = {
-    adult: false,
-    also_known_as: [
-      'クリス・プラット',
-      'کریس پرت',
-      'כריס פראט',
-      '克里斯·普瑞特',
-    ],
-    biography:
-      "Christopher Michael Pratt (born 21 June 1979) is an American actor, known for starring in both television and action films. He rose to prominence for his television roles, particularly in the NBC sitcom Parks and Recreation (2009–2015), for which he received critical acclaim and was nominated for the Critics' Choice Television Award for Best Supporting Actor in a Comedy Series in 2013. He also starred earlier in his career as Bright Abbott in The WB drama series Everwood (2002–2006) and had roles in Wanted (2008), Jennifer's Body (2009), Moneyball (2011), The Five-Year Engagement (2012), Zero Dark Thirty (2013), Delivery Man (2013), and Her (2013).\n\nPratt achieved leading man status in 2014, starring in two critically and commercially successful films: The Lego Movie as Emmet Brickowski, and Marvel Studios' Guardians of the Galaxy as Star-Lord. He starred in Jurassic World (2015) and Jurassic World: Fallen Kingdom (2018), and he reprised his Marvel role in Guardians of the Galaxy Vol. 2 (2017), Avengers: Infinity War (2018), Avengers: Endgame (2019), and the planned Guardians of the Galaxy Vol. 3. Meanwhile, in 2016 he was part of an ensemble cast in The Magnificent Seven and the male lead in Passengers.\n\nDescription above is from the Wikipedia article Chris Pratt, licensed under CC-BY-SA, full list of contributors on Wikipedia.",
-    birthday: '1979-06-21',
-    deathday: null,
-    gender: 2,
-    homepage: null,
-    id: 73457,
-    imdb_id: 'nm0695435',
-    known_for_department: 'Acting',
-    name: 'Chris Pratt',
-    place_of_birth: 'Virginia, Minnesota, USA',
-    popularity: 1.035,
-    profile_path: '/83o3koL82jt30EJ0rz4Bnzrt2dd.jpg',
+  const [personData, setPersonData] = useState(null);
+  const [personCreditsData, setPersonCreditsData] = useState(null);
+  const personDetailsUrl = id && `https://api.themoviedb.org/3/person/${id}`;
+  const options = {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      Authorization: `Bearer ${import.meta.env.VITE_API_READ_ACCESS_TOKEN}`,
+    },
   };
 
-  const creditsData = {
-    cast: [
-      {
-        adult: false,
-        backdrop_path: '/dFlRnvfDrmIE3LaL6SMQY3nqG2S.jpg',
-        genre_ids: [35],
-        id: 20703,
-        original_language: 'en',
-        original_title: 'Car Babes',
-        overview:
-          'A coming of age story about the quirky lives of car salesman.',
-        popularity: 0.25,
-        poster_path: '/pNmhaoRuduZOvgTc0Ujqs9gS2Tz.jpg',
-        release_date: '2006-12-26',
-        title: 'Car Babes',
-        video: false,
-        vote_average: 5.4,
-        vote_count: 7,
-        character: 'Babu Gulab',
-        credit_id: '52fe43f5c3a368484e007e9b',
-        order: 3,
-        media_type: 'movie',
-      },
-      {
-        adult: false,
-        backdrop_path: '/opepb164DeUZs0CwHLEOghPy46y.jpg',
-        genre_ids: [27],
-        id: 25543,
-        original_language: 'en',
-        original_title: 'Sunset Vampires',
-        overview:
-          "Forty years ago a supernatural force vanquished Brooke and Rhea, a sexy lipstick lesbian couple, after they committed an inconceivable murder. Now, on New Year's Eve, they'll rise from the dead. Still hot and still a couple, they're back as vampires. Enamored with their newfound power, it's no longer a question of whether they will kill again, but of how.",
-        popularity: 0.744,
-        poster_path: '/flr2h2L7Nd0EbYnYS3Hf8pBrnXP.jpg',
-        release_date: '2009-06-16',
-        title: 'Life Blood',
-        video: false,
-        vote_average: 3.8,
-        vote_count: 21,
-        character: 'Steve',
-        credit_id: '52fe44cec3a368484e037f6f',
-        order: 8,
-        media_type: 'movie',
-      },
-      {
-        adult: false,
-        backdrop_path: null,
-        genre_ids: [35],
-        id: 5834,
-        original_language: 'en',
-        original_title: 'The L.A. Riot Spectacular',
-        overview:
-          'The controversial satire The LA Riot Spectacular plays for mordent laughs the events that consumed L.A. in 1992, after the police officers on trial for beating motorist Rodney King were found innocent. The city was engulfed by a massive riot, but the film plays these moments for laughs. In addition to recreating some of the images seen on television, the film skewers a variety of figures including the police, the media, and the citizens of the city.',
-        popularity: 0.144,
-        poster_path: '/nsj6faAGp4n3mXinn8ClfiYJG5S.jpg',
-        release_date: '2005-04-25',
-        title: 'The L.A. Riot Spectacular',
-        video: false,
-        vote_average: 3,
-        vote_count: 4,
-        character: 'Nephi',
-        credit_id: '645ba7d06aa8e000ff5c7b31',
-        order: 20,
-        media_type: 'movie',
-      },
-      {
-        adult: false,
-        backdrop_path: '/5mUTmmBFbsXlJE66XOumJSzYK7M.jpg',
-        genre_ids: [27, 10749],
-        id: 252171,
-        original_language: 'en',
-        original_title: 'A Girl Walks Home Alone at Night',
-        overview:
-          'In the Iranian ghost-town Bad City, a place that reeks of death and loneliness, the townspeople are unaware they are being stalked by a lonesome vampire.',
-        popularity: 3.534,
-        poster_path: '/cd2rCE1nun7CESjBI8PGNEof1tb.jpg',
-        release_date: '2014-11-21',
-        title: 'A Girl Walks Home Alone at Night',
-        video: false,
-        vote_average: 6.8,
-        vote_count: 875,
-        character: "Hossein 'The Junkie'",
-        credit_id: '52fe4e319251416c91129759',
-        order: 2,
-        media_type: 'movie',
-      },
-      {
-        adult: false,
-        backdrop_path: '/z1T0Yez3YQUinAH3u2LifhnJdI0.jpg',
-        genre_ids: [35, 10749],
-        id: 253851,
-        original_language: 'en',
-        original_title: 'Shirin in Love',
-        overview:
-          'Despite being engaged to a successful Iranian plastic surgeon in Beverly Hills, Shirin finds herself falling for a mysterious young man who lives  in a lighthouse in northern California.',
-        popularity: 0.323,
-        poster_path: '/6F7ElOWZ3E8etmlNVpVdugjRmZ0.jpg',
-        release_date: '2014-03-14',
-        title: 'Shirin in Love',
-        video: false,
-        vote_average: 4.2,
-        vote_count: 9,
-        character: 'Nader',
-        credit_id: '52fe4e969251416c91136c71',
-        order: 3,
-        media_type: 'movie',
-      },
-      {
-        adult: false,
-        backdrop_path: '/5Iv5tf7E07o0SoWsomI37lc5wZC.jpg',
-        genre_ids: [35],
-        id: 25890,
-        original_language: 'en',
-        original_title: 'Looking for Comedy in the Muslim World',
-        overview:
-          'To improve its relations with Muslim countries, the United States government sends comedian Albert Brooks to south Asia to write a report on what makes followers of Islam laugh.',
-        popularity: 0.848,
-        poster_path: '/bVcC7tIxJQULEHP8mfzzJ4PG1I1.jpg',
-        release_date: '2006-01-20',
-        title: 'Looking for Comedy in the Muslim World',
-        video: false,
-        vote_average: 5.2,
-        vote_count: 24,
-        character: 'Shaif Al-Rafi',
-        credit_id: '6370398d02842000dcaafe15',
-        order: 48,
-        media_type: 'movie',
-      },
-      {
-        adult: false,
-        backdrop_path: '/4fU2ddunguMjxWK0oWdUfKES9Qo.jpg',
-        genre_ids: [28, 35],
-        id: 5851,
-        original_language: 'en',
-        original_title: 'Showtime',
-        overview:
-          'A spoof of buddy cop movies where two very different cops are forced to team up on a new reality based T.V. cop show.',
-        popularity: 3.568,
-        poster_path: '/8sIooUxXZo2blCVuAYbL2wkdUfD.jpg',
-        release_date: '2002-03-14',
-        title: 'Showtime',
-        video: false,
-        vote_average: 5.543,
-        vote_count: 988,
-        character: 'Convenience Store Owner',
-        credit_id: '63805420229ae2155c522b75',
-        order: 62,
-        media_type: 'movie',
-      },
-      {
-        adult: false,
-        backdrop_path: '/ckW6C0ks35qtia6Rzxv6KVLL6Ge.jpg',
-        genre_ids: [18],
-        id: 1061317,
-        original_language: 'fa',
-        original_title: 'ستاره بازی',
-        overview:
-          'Playing with Stars is a 2021 Iranian drama film directed and written by Hatef Alimardani. The film screened for the first time at the 39th Fajr Film Festival and earned 2 nominations.',
-        popularity: 0.015,
-        poster_path: '/kdcuDxcGsTkvlFL4WVQEfYNJn5F.jpg',
-        release_date: '2021-02-20',
-        title: 'Playing with Stars',
-        video: false,
-        vote_average: 0,
-        vote_count: 0,
-        character: '',
-        credit_id: '6399fda18a0e9b0082dd19fc',
-        order: 2,
-        media_type: 'movie',
-      },
-      {
-        adult: false,
-        backdrop_path: null,
-        genre_ids: [35, 18],
-        id: 1265452,
-        original_language: 'en',
-        original_title: 'Carts',
-        overview:
-          'A group of misfit shopping cart attendants deal with another day at their dead end jobs.',
-        popularity: 0.023,
-        poster_path: '/1Lt0oLRhpdMHdN1MbiQ3ts1GeP5.jpg',
-        release_date: '2007-09-13',
-        title: 'Carts',
-        video: false,
-        vote_average: 0,
-        vote_count: 0,
-        character: 'Fab',
-        credit_id: '660413f0197de401861dff5a',
-        order: 7,
-        media_type: 'movie',
-      },
-      {
-        adult: false,
-        backdrop_path: '/wug15qrt09vllipUKXr6SNf74QT.jpg',
-        genre_ids: [10749, 35, 18],
-        id: 916053,
-        original_language: 'en',
-        original_title: "Something from Tiffany's",
-        overview:
-          "One woman's life is forever changed by an engagement ring meant for someone else.",
-        popularity: 3.557,
-        poster_path: '/hzQV66zQHqWKRjLVphISNOqadIp.jpg',
-        release_date: '2022-12-08',
-        title: "Something from Tiffany's",
-        video: false,
-        vote_average: 6.7,
-        vote_count: 278,
-        character: 'Hot Dog Vendor (uncredited)',
-        credit_id: '63b254b20d417e00821be80d',
-        order: 23,
-        media_type: 'movie',
-      },
-      {
-        adult: false,
-        backdrop_path: '/jRZ3joUcg8YDCQYl4Tog5xhY6wk.jpg',
-        genre_ids: [28, 53],
-        id: 36955,
-        original_language: 'en',
-        original_title: 'True Lies',
-        overview:
-          'A fearless, globe-trotting, terrorist-battling secret agent has his life turned upside down when he discovers his wife might be having an affair with a used car salesman while terrorists smuggle nuclear war heads into the United States.',
-        popularity: 4.363,
-        poster_path: '/pweFTnzzTfGK68woSVkiTgjLzWm.jpg',
-        release_date: '1994-07-15',
-        title: 'True Lies',
-        video: false,
-        vote_average: 7.078,
-        vote_count: 4178,
-        character: 'Jamal Khaled',
-        credit_id: '55fdc4ce92514152aa0017f0',
-        order: 9,
-        media_type: 'movie',
-      },
-      {
-        adult: false,
-        backdrop_path: '/nzFPIv9i9iiFvbYWwpmfONAoNJM.jpg',
-        genre_ids: [35],
-        id: 299641,
-        original_language: 'en',
-        original_title: 'Jimmy Vestvood: Amerikan Hero',
-        overview:
-          'A wannabe private investigator wins the Green Card lottery and moves to America to pursue his dream only to find himself embroiled in a conspiracy to start the next world war.',
-        popularity: 1.418,
-        poster_path: '/z82d7Etu9nThYlo0kR6BOlRt9e0.jpg',
-        release_date: '2016-03-13',
-        title: 'Jimmy Vestvood: Amerikan Hero',
-        video: false,
-        vote_average: 5.3,
-        vote_count: 40,
-        character: 'Mehdi The Butcher',
-        credit_id: '569a4777c3a3686f9b0015b6',
-        order: 3,
-        media_type: 'movie',
-      },
-      {
-        adult: false,
-        backdrop_path: '/nevS6wjzCxZESvmjJZqdyZ3RNQ6.jpg',
-        genre_ids: [35, 80],
-        id: 115,
-        original_language: 'en',
-        original_title: 'The Big Lebowski',
-        overview:
-          "Jeffrey 'The Dude' Lebowski, a Los Angeles slacker who only wants to bowl and drink White Russians, is mistaken for another Jeffrey Lebowski, a wheelchair-bound millionaire, and finds himself dragged into a strange series of events involving nihilists, adult film producers, ferrets, errant toes, and large sums of money.",
-        popularity: 5.422,
-        poster_path: '/9mprbw31MGdd66LR0AQKoDMoFRv.jpg',
-        release_date: '1998-03-06',
-        title: 'The Big Lebowski',
-        video: false,
-        vote_average: 7.84,
-        vote_count: 11372,
-        character: 'Doctor',
-        credit_id: '568efbab9251416b4e003cd4',
-        order: 27,
-        media_type: 'movie',
-      },
-      {
-        adult: false,
-        backdrop_path: '/91KxAtv1KHW7bH0A2asXzXNyeXF.jpg',
-        genre_ids: [80, 18],
-        id: 15577,
-        original_language: 'en',
-        original_title: 'Crossing Over',
-        overview:
-          'Immigrants from around the world enter Los Angeles every day, with hopeful visions of a better life, but little notion of what that life may cost. Their desperate scenarios test the humanity of immigration enforcement officers. In Crossing Over, writer-director Wayne Kramer explores the allure of the American dream, and the reality that immigrants find – and create -- in 21st century L.A.',
-        popularity: 3.532,
-        poster_path: '/6A4WdvbWHJoIN4Y9Q5HXG8R1VYV.jpg',
-        release_date: '2009-02-10',
-        title: 'Crossing Over',
-        video: false,
-        vote_average: 6.1,
-        vote_count: 376,
-        character: 'Sanjar Baraheri',
-        credit_id: '667457eec040cf477631ed08',
-        order: 32,
-        media_type: 'movie',
-      },
-      {
-        adult: false,
-        backdrop_path: '/tEJ3nvnp520AvNPbhCegHMo1EfM.jpg',
-        genre_ids: [35, 18, 10749, 12],
-        id: 88005,
-        original_language: 'en',
-        original_title: 'Seeking a Friend for the End of the World',
-        overview:
-          'As an asteroid nears Earth, a man finds himself alone after his wife leaves in a panic. He decides to take a road trip to reunite with his high school sweetheart. Accompanying him is a neighbor who inadvertently puts a wrench in his plan.',
-        popularity: 3.783,
-        poster_path: '/rBbCwFLyt7Q25yaw2bEOQh7RMG1.jpg',
-        release_date: '2012-06-22',
-        title: 'Seeking a Friend for the End of the World',
-        video: false,
-        vote_average: 6.571,
-        vote_count: 2095,
-        character: 'Indian Man',
-        credit_id: '5778e055c3a368106a000bda',
-        order: 24,
-        media_type: 'movie',
-      },
-      {
-        adult: false,
-        backdrop_path: '/21RU5YYiLk3UVF9lRhf2fs1tRUK.jpg',
-        genre_ids: [35, 12],
-        id: 17610,
-        original_language: 'en',
-        original_title: 'Year One',
-        overview:
-          'When a couple of lazy hunter-gatherers are banished from their primitive village, they set off on an epic journey through the ancient world.',
-        popularity: 4.033,
-        poster_path: '/qF573jdJYwtCbXVXPDn4xu8nW2a.jpg',
-        release_date: '2009-06-18',
-        title: 'Year One',
-        video: false,
-        vote_average: 4.965,
-        vote_count: 1886,
-        character: 'Slave Trader',
-        credit_id: '578cb9a39251413fa4008bc5',
-        order: 21,
-        media_type: 'movie',
-      },
-      {
-        adult: false,
-        backdrop_path: null,
-        genre_ids: [18, 9648, 10749],
-        id: 118672,
-        original_language: 'en',
-        original_title: 'Word of Mouth',
-        overview:
-          "Torri is a prostitute who has risen to the highest ranks of her profession -- she's beautiful, sophisticated, charming, and charges high rates that her wealthy clients are happy to pay. In fact, Torri's renown is such that a documentary filmmaker has decided to make a movie about her life and work.",
-        popularity: 0.043,
-        poster_path: '/tkqdJnTcEPuIrMrxto2NcqJYONw.jpg',
-        release_date: '1999-01-26',
-        title: 'Word of Mouth',
-        video: false,
-        vote_average: 0,
-        vote_count: 0,
-        character: 'Hertzog',
-        credit_id: '58bb69efc3a368666b028f94',
-        order: 7,
-        media_type: 'movie',
-      },
-      {
-        adult: false,
-        backdrop_path: '/wipNqfX0XSqz2Muk7vXUE9QrHh0.jpg',
-        genre_ids: [18],
-        id: 452745,
-        original_language: 'fa',
-        original_title: 'ميهمانان هتل آستوريا',
-        overview:
-          'An Iranian couple (Shohreh Aghdashloo, Mohsen Marzban) declare themselves political refugees after police detain them on their way to Cuba.',
-        popularity: 0.035,
-        poster_path: '/7He5FsJmTdtiEojgJI5dhBMeWH6.jpg',
-        release_date: '1989-04-17',
-        title: 'Guests of Hotel Astoria',
-        video: false,
-        vote_average: 1,
-        vote_count: 1,
-        character: '',
-        credit_id: '58f5f518c3a3680e5d00a78f',
-        order: 3,
-        media_type: 'movie',
-      },
-      {
-        adult: false,
-        backdrop_path: '/oL8uNl3CLgK3C13i23o45MZx2Sy.jpg',
-        genre_ids: [18, 28],
-        id: 458414,
-        original_language: 'en',
-        original_title: 'Tiger',
-        overview:
-          'A practicing Sikh is banned by the boxing commission for refusing to back down from his religious beliefs. Through racial profiling and stereotypical threats, he does what any strong American would do: fight back.',
-        popularity: 0.503,
-        poster_path: '/cLa8lCiZyepoRPqAjnOhOvLPuyN.jpg',
-        release_date: '2018-11-30',
-        title: 'Tiger',
-        video: false,
-        vote_average: 6.1,
-        vote_count: 14,
-        character: 'Kulwant',
-        credit_id: '592069d79251414a7b048516',
-        order: 4,
-        media_type: 'movie',
-      },
-      {
-        adult: false,
-        backdrop_path: '/oiAxSd84kVy2cwBCMAWbKRVkvDj.jpg',
-        genre_ids: [53, 18, 10749],
-        id: 461913,
-        original_language: 'en',
-        original_title: 'Benjamin Troubles',
-        overview:
-          'Benjamin Troubles is a tale of urban magic that follows Ben, an out of luck loser, who finds himself suddenly endowed with large sums of money due to a mysterious gift, a pair of magic jeans that produce $100 bills every hour.',
-        popularity: 0.184,
-        poster_path: '/iYPmBO7rt40sE8ukdiEEvOrCLHr.jpg',
-        release_date: '2017-06-27',
-        title: 'Benjamin Troubles',
-        video: false,
-        vote_average: 5.2,
-        vote_count: 5,
-        character: 'Genie',
-        credit_id: '5941bd8bc3a3687ddb013813',
-        order: 6,
-        media_type: 'movie',
-      },
-      {
-        adult: false,
-        backdrop_path: '/rLI9BgVNHvdBmCavrgOUjqaFLnN.jpg',
-        genre_ids: [18],
-        id: 116683,
-        original_language: 'en',
-        original_title: 'The Last Producer',
-        overview:
-          'An old-time mogul struggles to reenter the club where power and money make the rules.',
-        popularity: 0.178,
-        poster_path: '/6aMF3iBQgeq1hR8xGepI04HM6Fr.jpg',
-        release_date: '2000-08-22',
-        title: 'The Last Producer',
-        video: false,
-        vote_average: 4.8,
-        vote_count: 5,
-        character: 'Cabbie',
-        credit_id: '59789ad5c3a368608a00fea8',
-        order: 20,
-        media_type: 'movie',
-      },
-      {
-        adult: false,
-        backdrop_path: null,
-        genre_ids: [35, 53, 27],
-        id: 519699,
-        original_language: 'en',
-        original_title: 'The Next Big Thing',
-        overview:
-          "The Next Big Thing is a dark comedy about friendship, revenge and the lust for fame. The protagonist is Julian, who, despite his \"talent,\" has never achieved the level of fame he thinks he deserves. When his deranged and estranged best friend Chuck shows up with a plan to make Julian famous by making a film about Julian becoming famous, Julian agrees to do it. Unfortunately for Julian, Chuck's real aim is to make a prank show centered on ruining Julian's life. After a series of embarrassing and painful events Julian begins to regret his decision, but the worse the situation is for Julian, the more popular the videos become. Julian's ego allows Chuck to bring him to the edge of his sanity and beyond.",
-        popularity: 0.042,
-        poster_path: '/fhSgbiyKF1mXGZ4AtQeY7ZFjJSd.jpg',
-        release_date: '2016-07-04',
-        title: 'The Next Big Thing',
-        video: false,
-        vote_average: 2,
-        vote_count: 1,
-        character: 'Mr. Shah',
-        credit_id: '5adb9b9bc3a36862ef013790',
-        order: 2,
-        media_type: 'movie',
-      },
-      {
-        adult: false,
-        backdrop_path: '/2mE3up8HbAQqXUHpGjQOiWa370E.jpg',
-        genre_ids: [12, 18, 53, 28, 10770],
-        id: 28512,
-        original_language: 'en',
-        original_title: 'The Poseidon Adventure',
-        overview:
-          "A cruise ship succumbs to a terrorist act and capsizes on New Year's eve. A rag-tag group of survivors, spearheaded by a priest and a homeland security agent, must journey through the upside down vessel and attempt an escape.",
-        popularity: 3.531,
-        poster_path: '/a8eznt2qshQS8qnZ70vdsM6UBeF.jpg',
-        release_date: '2005-11-20',
-        title: 'The Poseidon Adventure',
-        video: false,
-        vote_average: 5.21,
-        vote_count: 107,
-        character: 'Jordanian General',
-        credit_id: '5b5773380e0a2673d603dd14',
-        order: 23,
-        media_type: 'movie',
-      },
-      {
-        adult: false,
-        backdrop_path: '/sAiTihJ8bjEqg8nYUIlTQUnVXuj.jpg',
-        genre_ids: [37, 12],
-        id: 2023,
-        original_language: 'en',
-        original_title: 'Hidalgo',
-        overview:
-          'Set in 1890, this is the story of a Pony Express courier who travels to Arabia to compete with his horse, Hidalgo, in a dangerous race for a massive contest prize, in an adventure that sends the pair around the world...',
-        popularity: 3.531,
-        poster_path: '/iGzENlBPYJEFWZnye4t3nqWSSp1.jpg',
-        release_date: '2004-02-04',
-        title: 'Hidalgo',
-        video: false,
-        vote_average: 6.9,
-        vote_count: 1233,
-        character: 'Camel Skinner',
-        credit_id: '5c31af010e0a2663023be19b',
-        order: 23,
-        media_type: 'movie',
-      },
-      {
-        adult: false,
-        backdrop_path: '/a5sWhjuumhxYiRDf0MU4wDyzve2.jpg',
-        genre_ids: [27],
-        id: 588087,
-        original_language: 'en',
-        original_title: 'A Girl Walks Home Alone at Night',
-        overview:
-          'A girl walks home alone at night and a man follows her with insidious intentions, but when he gets to her apartment, she turns the tables in the most surprising way…with her fangs.',
-        popularity: 0.145,
-        poster_path: '/Afa0eZ6XdwYLGM2eIANtnGMy03q.jpg',
-        release_date: '2011-12-31',
-        title: 'A Girl Walks Home Alone at Night',
-        video: false,
-        vote_average: 7.6,
-        vote_count: 4,
-        character: 'The Man',
-        credit_id: '5c89ec5dc3a36864650d0bf4',
-        order: 1,
-        media_type: 'movie',
-      },
-      {
-        adult: false,
-        backdrop_path: null,
-        genre_ids: [18, 10751],
-        id: 457663,
-        original_language: 'en',
-        original_title: 'The Magic Shoes',
-        overview:
-          'A USC Graduate Thesis Film about a nine-year-old Persian boy in 1992 Los Angeles who thinks a pair of Air Jordans will make him fly.',
-        popularity: 0.005,
-        poster_path: '/wIG2b5m5IFr0m2HaDzk3T70WQcE.jpg',
-        release_date: '2015-03-23',
-        title: 'The Magic Shoes',
-        video: false,
-        vote_average: 0,
-        vote_count: 0,
-        character: 'Uncle Bijan',
-        credit_id: '5d90e535109cd00029454b34',
-        order: 3,
-        media_type: 'movie',
-      },
-      {
-        adult: false,
-        backdrop_path: '/wXH7pLmc1vqqfjeKrfa95QRnVhK.jpg',
-        genre_ids: [18],
-        id: 477202,
-        original_language: 'en',
-        original_title: 'A Life Lived',
-        overview:
-          'The story about the life of a dollar bill, and the many lives it passes along the way.',
-        popularity: 0.112,
-        poster_path: '/r9xLMEkX3pDJGSYL4HcfpoHePIw.jpg',
-        release_date: '2016-06-26',
-        title: 'A Life Lived',
-        video: false,
-        vote_average: 8.3,
-        vote_count: 3,
-        character: 'Danesh',
-        credit_id: '5ed7088c1b157d001e567197',
-        order: 3,
-        media_type: 'movie',
-      },
-      {
-        adult: false,
-        backdrop_path: '/mQzeocOItlHOf26UQeYEFgAvNaJ.jpg',
-        genre_ids: [14, 35, 10751],
-        id: 11511,
-        original_language: 'en',
-        original_title: 'Kazaam',
-        overview:
-          'When Max fools a gang of local toughs, he finds himself in big trouble. Fleeing from the thugs, Max runs into an old warehouse and bumps into a boom box. By doing that, he manages to release Kazaam, a genie who has been held captive for thousands of years.',
-        popularity: 3.53,
-        poster_path: '/k6kXq27UVxf7zGCWSvygYYIp9eP.jpg',
-        release_date: '1996-07-17',
-        title: 'Kazaam',
-        video: false,
-        vote_average: 4.1,
-        vote_count: 277,
-        character: 'Malik',
-        credit_id: '5ef2c3192b210800359007bb',
-        order: 3,
-        media_type: 'movie',
-      },
-      {
-        adult: false,
-        backdrop_path: '/xjBcaVGVQuXws9tqqhCs1xp7M8m.jpg',
-        genre_ids: [28, 35, 18, 80],
-        id: 12770,
-        original_language: 'en',
-        original_title: 'Stealing Harvard',
-        overview:
-          "John and his girlfriend have vowed to marry once they save $30,000 for their dream house. But the minute they achieve their financial goal, John finds out his niece has been accepted at Harvard, and he's reminded of his promise to pay for her tuition (nearly $30,000). John's friend Duff convinces him to turn to petty crime to make the payment … but Duff's hare-brained schemes spin quickly out of control.",
-        popularity: 3.531,
-        poster_path: '/iCHAn0eVAXwybuzoQO598aKMVJD.jpg',
-        release_date: '2002-09-13',
-        title: 'Stealing Harvard',
-        video: false,
-        vote_average: 4.8,
-        vote_count: 138,
-        character: 'Toy Store Manager',
-        credit_id: '5f06f08693db92003647a4da',
-        order: 21,
-        media_type: 'movie',
-      },
-      {
-        adult: false,
-        backdrop_path: '/4IIq2f7QkYItfMTYWRc3OLBIt33.jpg',
-        genre_ids: [35, 18],
-        id: 719901,
-        original_language: 'en',
-        original_title: 'The Last Conception',
-        overview:
-          'The Sikand family learns they are part of an ancient bloodline and the only hope at continuing it is their gay daughter Savarna.',
-        popularity: 0.259,
-        poster_path: '/4tc4G2YvPOm8Ms2f5ditpdyaQVf.jpg',
-        release_date: '2020-08-04',
-        title: 'The Last Conception',
-        video: false,
-        vote_average: 3.8,
-        vote_count: 7,
-        character: 'Davidia Sikand',
-        credit_id: '5f2b3a6cfab3fa0036fcf2a3',
-        order: 0,
-        media_type: 'movie',
-      },
-      {
-        adult: false,
-        backdrop_path: '/cO2JV41rdC561pVh0ZlC4NFGFzF.jpg',
-        genre_ids: [35],
-        id: 14771,
-        original_language: 'en',
-        original_title: 'The Onion Movie',
-        overview:
-          'Venerable newscaster Norm Archer reports the latest news in politics, health, culture and entertainment - such as an automotive recall of decapitation-inducing "Neckbelts" and a study finding that "depression hits losers hardest". This compilation of bogus news stories, celebrity profiles, movie trailers and skits come courtesy of the ace satirists at The Onion.',
-        popularity: 3.532,
-        poster_path: '/AikMOGbaKpCzHnupsdBzyacsKC2.jpg',
-        release_date: '2008-05-31',
-        title: 'The Onion Movie',
-        video: false,
-        vote_average: 6.1,
-        vote_count: 223,
-        character: 'Announcer',
-        credit_id: '5f2e40b35c32470038844025',
-        order: 36,
-        media_type: 'movie',
-      },
-      {
-        adult: false,
-        backdrop_path: null,
-        genre_ids: [18],
-        id: 735925,
-        original_language: 'en',
-        original_title: 'Checkpoint',
-        overview:
-          'A busload of College students, returning to Michigan from a Canadian field trip, is stopped at the US border at the time of the Iranian hostage crisis. The group includes a number of Iranian passengers, divided along ideological lines, whose debates about policy and politics soon lead to a full-scale confrontation.',
-        popularity: 0.007,
-        poster_path: '/zOv62JjaDQHoJgKruKb3aeMkJPO.jpg',
-        release_date: '1987-08-14',
-        title: 'Checkpoint',
-        video: false,
-        vote_average: 0,
-        vote_count: 0,
-        character: 'Abe',
-        credit_id: '5f428a964772150033627c76',
-        order: 2,
-        media_type: 'movie',
-      },
-      {
-        adult: false,
-        backdrop_path: '/deK59J0coTXwDZZsa5xltuQ2mCV.jpg',
-        genre_ids: [14],
-        id: 289378,
-        original_language: 'en',
-        original_title: 'To the Ends of Time',
-        overview:
-          'In a mythical kingdom, a young boy must fight time for the love of his princess and the future of his land.',
-        popularity: 0.212,
-        poster_path: '/2JEjiEmBeTgq97M3b88qwCPH10k.jpg',
-        release_date: '1996-10-21',
-        title: 'To the Ends of Time',
-        video: false,
-        vote_average: 5.3,
-        vote_count: 6,
-        character: 'Morlin General',
-        credit_id: '60230a72dd25890040bb9ed9',
-        order: 26,
-        media_type: 'movie',
-      },
-      {
-        adult: false,
-        backdrop_path: '/c8MBfksg4qbxc1UEg5GyQFAn4gj.jpg',
-        genre_ids: [28, 878, 14],
-        id: 60495,
-        original_language: 'en',
-        original_title: 'Guardian',
-        overview:
-          'With a spate of violence that rocks the inner city, L.A.P.D. and ex-Marine John Kross investigates its cause: a new drug called Chaos. With help from his partner Carpenter, they delve into the mystery, only to discover a link between the drug and a terrifying supernatural power unleashed during the gulf war, witnessed by Kross twelve years ago. Now, Kross must race against time to stop the destruction, battle his own demons and come to grips with his destiny as he discovers that his reality has been mapped by a power much greater than himself.',
-        popularity: 0.319,
-        poster_path: '/rzcyZbBhvhu2GiX5M9RzMC7PQgo.jpg',
-        release_date: '2001-06-12',
-        title: 'Guardian',
-        video: false,
-        vote_average: 5.6,
-        vote_count: 9,
-        character: 'Iraqi Colonel',
-        credit_id: '609a15cfefd3c2003d956db5',
-        order: 12,
-        media_type: 'movie',
-      },
-      {
-        adult: false,
-        backdrop_path: null,
-        genre_ids: [35],
-        id: 857448,
-        original_language: 'en',
-        original_title: 'Pants on Fire',
-        overview:
-          "A struggling actor's tall tales of fame and fortune are suddenly challenged when his hometown buddies make a surprise trip to Hollywood.",
-        popularity: 0.01,
-        poster_path: '/bERGYA5Lf7tSr1sbTiMXnq6VbNJ.jpg',
-        release_date: '2008-11-08',
-        title: 'Pants on Fire',
-        video: false,
-        vote_average: 0,
-        vote_count: 0,
-        character: 'Aram',
-        credit_id: '61084bb1ee43e8005e3d5c1b',
-        order: 7,
-        media_type: 'movie',
-      },
-      {
-        adult: false,
-        backdrop_path: '/1jHxkVXMI5s3vRiyiZooUy1shB5.jpg',
-        genre_ids: [12, 14, 28],
-        id: 285,
-        original_language: 'en',
-        original_title: "Pirates of the Caribbean: At World's End",
-        overview:
-          "Will Turner and Elizabeth Swann join forces with the revived Captain Barbossa to free Jack Sparrow from Davy Jones' locker. The group must navigate dangerous waters, confront many foes and, ultimately, choose sides in a battle wherein piracy itself hangs in the balance.",
-        popularity: 4.715,
-        poster_path: '/jGWpG4YhpQwVmjyHEGkxEkeRf0S.jpg',
-        release_date: '2007-05-19',
-        title: "Pirates of the Caribbean: At World's End",
-        video: false,
-        vote_average: 7.258,
-        vote_count: 14571,
-        character: 'Sumbhajee',
-        credit_id: '670af77f3bb4557c669b4665',
-        order: 41,
-        media_type: 'movie',
-      },
-      {
-        adult: false,
-        backdrop_path: null,
-        genre_ids: [80, 10770, 28, 12],
-        id: 279794,
-        original_language: 'en',
-        original_title: 'Supreme Sanction',
-        overview:
-          'An elite assassin for a covert Government agency is marked for death after aborting an assignment to take out a journalist who could expose the corruption of the very institution that trained her as their weapon of choice.',
-        popularity: 0.178,
-        poster_path: '/9aRmJvdkGiKT6wtWOVsrU9r11UQ.jpg',
-        release_date: '1999-04-09',
-        title: 'Supreme Sanction',
-        video: false,
-        vote_average: 5.8,
-        vote_count: 5,
-        character: 'Hawk Face Man',
-        credit_id: '6790a6d4a3c7d79472dfeffe',
-        order: 12,
-        media_type: 'movie',
-      },
-      {
-        adult: false,
-        backdrop_path: null,
-        genre_ids: [35],
-        id: 1426820,
-        original_language: 'en',
-        original_title: 'New Car Smell',
-        overview:
-          'A Las Vegas car dealership contest pits an eclectic group of salespeople against each other to see who will become team sales leader.',
-        popularity: 0.01,
-        poster_path: null,
-        release_date: '2005-01-01',
-        title: 'New Car Smell',
-        video: false,
-        vote_average: 0,
-        vote_count: 0,
-        character: 'Customer',
-        credit_id: '679ccea62de2202ed5bde7b5',
-        order: 4,
-        media_type: 'movie',
-      },
-      {
-        adult: false,
-        backdrop_path: '/u9xzvZ7vrNdd2ahkd2xElOWKajG.jpg',
-        genre_ids: [35],
-        id: 1117991,
-        original_language: 'en',
-        original_title: 'The Greatest of All Tina',
-        overview:
-          "Tina’s life's in shambles. After a series of mishaps, She moves in with her mom, embraces Goat Yoga wisdom, and decides to live life like a goat. Her stepdad takes her to a farm, where harsh farm life and a farmer’s son challenge her resolve.",
-        popularity: 0.001,
-        poster_path: '/7kHJPmUdJHmkOoewyd410NwWwPO.jpg',
-        release_date: '2022-12-07',
-        title: 'The Greatest of All Tina',
-        video: false,
-        vote_average: 0,
-        vote_count: 0,
-        character: 'Dr. Morvareed',
-        credit_id: '67bf3ccf6f07f08cd55636a7',
-        order: 10,
-        media_type: 'movie',
-      },
-      {
-        adult: false,
-        backdrop_path: '/9YteO4VWteiPmEbWYJRAeBTQZPD.jpg',
-        genre_ids: [35],
-        id: 1100,
-        origin_country: ['US'],
-        original_language: 'en',
-        original_name: 'How I Met Your Mother',
-        overview:
-          'A father recounts to his children - through a series of flashbacks - the journey he and his four best friends took leading up to him meeting their mother.',
-        popularity: 9.824,
-        poster_path: '/b34jPzmB0wZy7EjUZoleXOl2RRI.jpg',
-        first_air_date: '2005-09-19',
-        name: 'How I Met Your Mother',
-        vote_average: 8.1,
-        vote_count: 5137,
-        character: 'Ranjit Singh',
-        credit_id: '5254161a19c295794037bf68',
-        episode_count: 22,
-        media_type: 'tv',
-      },
-      {
-        adult: false,
-        backdrop_path: '/oRdc2nn7jLOYy4fBdvmFKPsKzZE.jpg',
-        genre_ids: [80, 18, 9648],
-        id: 2734,
-        origin_country: ['US'],
-        original_language: 'en',
-        original_name: 'Law & Order: Special Victims Unit',
-        overview:
-          'In the criminal justice system, sexually-based offenses are considered especially heinous. In New York City, the dedicated detectives who investigate these vicious felonies are members of an elite squad known as the Special Victims Unit. These are their stories.',
-        popularity: 88.981,
-        poster_path: '/abWOCrIo7bbAORxcQyOFNJdnnmR.jpg',
-        first_air_date: '1999-09-20',
-        name: 'Law & Order: Special Victims Unit',
-        vote_average: 7.9,
-        vote_count: 3892,
-        character: 'Saleh Amir',
-        credit_id: '525742cf760ee36aaa0c8b79',
-        episode_count: 1,
-        media_type: 'tv',
-      },
-      {
-        adult: false,
-        backdrop_path: '/jwFJrUXj0SEAVpZsgvRUBi5trLL.jpg',
-        genre_ids: [10759, 18, 80],
-        id: 2919,
-        origin_country: ['US'],
-        original_language: 'en',
-        original_name: 'Burn Notice',
-        overview:
-          'A formerly blacklisted spy uses his unique skills and training to help people in desperate situations.',
-        popularity: 3.985,
-        poster_path: '/o2fnD3SNiQjGVgA2C3ezaeh2HK.jpg',
-        first_air_date: '2007-06-28',
-        name: 'Burn Notice',
-        vote_average: 7.4,
-        vote_count: 511,
-        character: 'Anwar',
-        credit_id: '525749d619c29531db099159',
-        episode_count: 1,
-        media_type: 'tv',
-      },
-      {
-        adult: false,
-        backdrop_path: '/w00lfexrsOeR25dO4hsWhbcUnmD.jpg',
-        genre_ids: [9648, 10765, 80],
-        id: 4087,
-        origin_country: ['US'],
-        original_language: 'en',
-        original_name: 'The X-Files',
-        overview:
-          "The exploits of FBI Special Agents Fox Mulder and Dana Scully who investigate X-Files: marginalized, unsolved cases involving paranormal phenomena. Mulder believes in the existence of aliens and the paranormal while Scully, a skeptic, is assigned to make scientific analyses of Mulder's discoveries that debunk Mulder's work and thus return him to mainstream cases.",
-        popularity: 8.873,
-        poster_path: '/rcBx0p8h51LHceyhquYMxbspJQu.jpg',
-        first_air_date: '1993-09-10',
-        name: 'The X-Files',
-        vote_average: 8.376,
-        vote_count: 3182,
-        character: 'Mr. Jank',
-        credit_id: '52575e24760ee36aaa2c87ce',
-        episode_count: 1,
-        media_type: 'tv',
-      },
-      {
-        adult: false,
-        backdrop_path: null,
-        genre_ids: [9648, 35],
-        id: 4667,
-        origin_country: ['US'],
-        original_language: 'en',
-        original_name: 'Andy Barker, P.I.',
-        overview:
-          'Certified public accountant Andy Barker reluctantly becomes a private investigator after he is mistaken for the former office tenant, who was a private eye.',
-        popularity: 0.529,
-        poster_path: '/uJD9UMko7SPZWwzxm1M0vQw1yYH.jpg',
-        first_air_date: '2007-03-15',
-        name: 'Andy Barker, P.I.',
-        vote_average: 7.2,
-        vote_count: 13,
-        character: 'Wally',
-        credit_id: '52577957760ee36aaa56390a',
-        episode_count: 6,
-        media_type: 'tv',
-      },
-      {
-        adult: false,
-        backdrop_path: '/5olSfAUqoASDsq1C7el6hYM9Kju.jpg',
-        genre_ids: [35],
-        id: 4556,
-        origin_country: ['US'],
-        original_language: 'en',
-        original_name: 'Scrubs',
-        overview:
-          'In the unreal world of Sacred Heart Hospital, John "J.D." Dorian learns the ways of medicine, friendship and life.',
-        popularity: 5.555,
-        poster_path: '/u1z05trCA7AuSuDhi365grwdos1.jpg',
-        first_air_date: '2001-10-02',
-        name: 'Scrubs',
-        vote_average: 8.021,
-        vote_count: 1893,
-        character: 'Pizza Guy',
-        credit_id: '52577014760ee36aaa46e5ee',
-        episode_count: 1,
-        media_type: 'tv',
-      },
-      {
-        adult: false,
-        backdrop_path: '/3Cp0XyY2xdKTTpNH09A8yyrrrJs.jpg',
-        genre_ids: [18],
-        id: 6974,
-        origin_country: ['US'],
-        original_language: 'en',
-        original_name: 'Raising the Bar',
-        overview:
-          "The lives and cases of young lawyers who work on opposite sides - the public defender's office and the district attorney's office - as well as those who sit in judgment on their cases.",
-        popularity: 1.054,
-        poster_path: '/tme6LDVkSpondEUZ8NDxp4ABSRr.jpg',
-        first_air_date: '2008-09-01',
-        name: 'Raising the Bar',
-        vote_average: 6.9,
-        vote_count: 9,
-        character: '',
-        credit_id: '60e87e68b7d352005e2002c5',
-        episode_count: 1,
-        media_type: 'tv',
-      },
-      {
-        adult: false,
-        backdrop_path: '/gVAwcl83Ys1dtcFCiLuCLAx6xge.jpg',
-        genre_ids: [18, 10751, 9648],
-        id: 2625,
-        origin_country: ['US'],
-        original_language: 'en',
-        original_name: 'Diagnosis: Murder',
-        overview:
-          'Dr. Mark Sloan is a good-natured, offbeat physician who is called upon to solve murders.',
-        popularity: 4.681,
-        poster_path: '/5yhozeY2KgYXQQE9kfbiIyypYiI.jpg',
-        first_air_date: '1993-10-29',
-        name: 'Diagnosis: Murder',
-        vote_average: 7.1,
-        vote_count: 112,
-        character: "Maitre'd",
-        credit_id: '60d1a1bcbf31f2005d18b9e8',
-        episode_count: 1,
-        media_type: 'tv',
-      },
-      {
-        adult: false,
-        backdrop_path: '/mSI7pojOfvyrOg0DDxMcBjm4IIm.jpg',
-        genre_ids: [35],
-        id: 4454,
-        origin_country: ['US'],
-        original_language: 'en',
-        original_name: 'Will & Grace',
-        overview:
-          "Will Truman and Grace Adler are best friends living in New York, and when Grace's engagement falls apart, she moves in with Will. Together, along with their friends, they go through the trials of dating, sex, relationships and their careers, butting heads at times but ultimately supporting one another while exchanging plenty of witty banter along the way.",
-        popularity: 4.702,
-        poster_path: '/djranOgKCAHdejWLXhAlfK9vMH9.jpg',
-        first_air_date: '1998-09-21',
-        name: 'Will & Grace',
-        vote_average: 6.8,
-        vote_count: 499,
-        character: 'Mr. Zamir',
-        credit_id: '54a93e97c3a3680c21004a2c',
-        episode_count: 7,
-        media_type: 'tv',
-      },
-      {
-        adult: false,
-        backdrop_path: '/csOIulXwQxsuCFp3ZZ9cYkJmCwH.jpg',
-        genre_ids: [35, 18, 80],
-        id: 71715,
-        origin_country: ['US'],
-        original_language: 'en',
-        original_name: 'Good Girls',
-        overview:
-          'Three "good girl" suburban wives and mothers suddenly find themselves in desperate circumstances and decide to stop playing it safe and risk everything to take their power back.',
-        popularity: 6.161,
-        poster_path: '/gPjcbxrYfbrJNq1Ja8EGd0XtUnC.jpg',
-        first_air_date: '2018-02-26',
-        name: 'Good Girls',
-        vote_average: 7.9,
-        vote_count: 623,
-        character: 'Bank Security Guard',
-        credit_id: '614248e756b9f7006381592a',
-        episode_count: 1,
-        media_type: 'tv',
-      },
-      {
-        adult: false,
-        backdrop_path: '/ruwqs7iQWh0WbCRH9hoWr9K0QR5.jpg',
-        genre_ids: [18],
-        id: 43121,
-        origin_country: ['US'],
-        original_language: 'en',
-        original_name: 'Political Animals',
-        overview:
-          'Former first lady and current Secretary of State Elaine Barrish Hammond try to keep her family together while simultaneously dealing with crises of the State Department and fending off the hungry DC journalist who is bent on destroying her career.',
-        popularity: 2.581,
-        poster_path: '/fnFNsleo5IcUAqNjiKgixkGyxd2.jpg',
-        first_air_date: '2012-07-15',
-        name: 'Political Animals',
-        vote_average: 7.26,
-        vote_count: 73,
-        character: 'Amir Jobrani',
-        credit_id: '615afbd70bc52900608a171f',
-        episode_count: 1,
-        media_type: 'tv',
-      },
-      {
-        adult: false,
-        backdrop_path: '/vF2hoPhXa6OaQYDZE6C7HET2wLE.jpg',
-        genre_ids: [35],
-        id: 1466,
-        origin_country: ['US'],
-        original_language: 'en',
-        original_name: 'Joey',
-        overview:
-          'The charming and still-single Joey has struck out on his own and moved to Hollywood, hoping to truly make it as an actor. After reuniting with his high-strung sister Gina, Joey moves in with Michael, his 20-year-old genius nephew, who unbelievably is literally a rocket scientist. However, what Joey lacks in book smarts he makes up for with people smarts – making him the best new friend his nephew could ask for.',
-        popularity: 3.789,
-        poster_path: '/bU5yBQsmt0CnIpi9z8zB3iL7ZHP.jpg',
-        first_air_date: '2004-09-08',
-        name: 'Joey',
-        vote_average: 6.277,
-        vote_count: 321,
-        character: 'Lloyd',
-        credit_id: '572c7797c3a3684aa000080b',
-        episode_count: 1,
-        media_type: 'tv',
-      },
-      {
-        adult: false,
-        backdrop_path: '/wCnJBOVg8Nnf9hweQbFXJZ0694B.jpg',
-        genre_ids: [35],
-        id: 63260,
-        origin_country: ['US'],
-        original_language: 'en',
-        original_name: "Cooper Barrett's Guide to Surviving Life",
-        overview:
-          'As Cooper Barrett struggles to survive each of life’s many challenges, he guides us through the often-messy, always-hilarious ordeal, so that our lives don’t have to be nearly the entertaining disaster that Cooper’s is turning out to be.',
-        popularity: 0.798,
-        poster_path: '/AbNiwiMD1504HHoMfg5bgvdeCpu.jpg',
-        first_air_date: '2016-01-03',
-        name: "Cooper Barrett's Guide to Surviving Life",
-        vote_average: 5.4,
-        vote_count: 21,
-        character: '',
-        credit_id: '650c98c32c6b7b01394a501e',
-        episode_count: 4,
-        media_type: 'tv',
-      },
-      {
-        adult: false,
-        backdrop_path: '/mRcHQDyl24wuJGrCvOsZcgWP152.jpg',
-        genre_ids: [10765, 18, 35],
-        id: 76496,
-        origin_country: ['US'],
-        original_language: 'en',
-        original_name: 'The Beauty Inside',
-        overview:
-          'Alex wakes up every day as a different person. He is always the same person on the inside, but on the outside he is somebody else. When he meets Leah and falls in love everything changes for him. He knows he will see her again, but she will never see him.',
-        popularity: 0.928,
-        poster_path: '/hKtPdpEBOiMVHZt3LxF9W2QvBdJ.jpg',
-        first_air_date: '2012-08-15',
-        name: 'The Beauty Inside',
-        vote_average: 7.3,
-        vote_count: 26,
-        character: 'Alex #6',
-        credit_id: '62ded2e5238513004de96b61',
-        episode_count: 1,
-        media_type: 'tv',
-      },
-      {
-        adult: false,
-        backdrop_path: '/4MRgkPa85umPuvNpahlQo1JtzMP.jpg',
-        genre_ids: [35],
-        id: 31497,
-        origin_country: ['US'],
-        original_language: 'en',
-        original_name: 'The League',
-        overview:
-          'The League is an American sitcom and semi-improvised comedy about a about a fantasy football league and its members and their everyday lives.',
-        popularity: 3.7,
-        poster_path: '/2l9lrTVG0BxU7zqsf5UQ1g4AbBH.jpg',
-        first_air_date: '2009-10-29',
-        name: 'The League',
-        vote_average: 7.387,
-        vote_count: 195,
-        character: 'Valet',
-        credit_id: '5c88582e9251410cf7bff3d4',
-        episode_count: 1,
-        media_type: 'tv',
-      },
-      {
-        adult: false,
-        backdrop_path: '/5olSfAUqoASDsq1C7el6hYM9Kju.jpg',
-        genre_ids: [35],
-        id: 4556,
-        origin_country: ['US'],
-        original_language: 'en',
-        original_name: 'Scrubs',
-        overview:
-          'In the unreal world of Sacred Heart Hospital, John "J.D." Dorian learns the ways of medicine, friendship and life.',
-        popularity: 5.555,
-        poster_path: '/u1z05trCA7AuSuDhi365grwdos1.jpg',
-        first_air_date: '2001-10-02',
-        name: 'Scrubs',
-        vote_average: 8.021,
-        vote_count: 1893,
-        character: 'Akbar',
-        credit_id: '5d68c45813af5f0013bc68bb',
-        episode_count: 1,
-        media_type: 'tv',
-      },
-      {
-        adult: false,
-        backdrop_path: '/5olSfAUqoASDsq1C7el6hYM9Kju.jpg',
-        genre_ids: [35],
-        id: 4556,
-        origin_country: ['US'],
-        original_language: 'en',
-        original_name: 'Scrubs',
-        overview:
-          'In the unreal world of Sacred Heart Hospital, John "J.D." Dorian learns the ways of medicine, friendship and life.',
-        popularity: 5.555,
-        poster_path: '/u1z05trCA7AuSuDhi365grwdos1.jpg',
-        first_air_date: '2001-10-02',
-        name: 'Scrubs',
-        vote_average: 8.021,
-        vote_count: 1893,
-        character: 'Dr. Akbar',
-        credit_id: '5d68d863ca83545e55f6df0a',
-        episode_count: 1,
-        media_type: 'tv',
-      },
-      {
-        adult: false,
-        backdrop_path: '/yKfN1bnjsR8kBg4FedE9ShFRVm.jpg',
-        genre_ids: [35],
-        id: 67040,
-        origin_country: ['US'],
-        original_language: 'en',
-        original_name: 'Speechless',
-        overview:
-          'Maya DiMeo is a mom on a mission who will do anything for her husband, Jimmy, and kids Ray, Dylan, and JJ, her eldest son with special needs. As Maya fights injustices both real and imagined, the family works to make a new home for themselves and searches for just the right person to give JJ his “voice.”',
-        popularity: 3.51,
-        poster_path: '/7EHM9vaAWBBWgBJnQapYKjGIVHt.jpg',
-        first_air_date: '2016-09-21',
-        name: 'Speechless',
-        vote_average: 7.03,
-        vote_count: 99,
-        character: 'Juror',
-        credit_id: '661198a66f43ec0163c14ecf',
-        episode_count: 1,
-        media_type: 'tv',
-      },
-      {
-        adult: false,
-        backdrop_path: '/nDhhWFhjEaihxFFiqJ7mfUX1DlY.jpg',
-        genre_ids: [35],
-        id: 32294,
-        origin_country: ['US'],
-        original_language: 'en',
-        original_name: 'Hot in Cleveland',
-        overview:
-          'Three fabulous, eccentric, LA best friends of a certain age have their lives changed forever when their plane unexpectedly lands in Cleveland and they soon rediscover themselves in this new "promised land."',
-        popularity: 3.94,
-        poster_path: '/oSd0I8hc62W8xZVCOpZvRXS90Ty.jpg',
-        first_air_date: '2010-06-16',
-        name: 'Hot in Cleveland',
-        vote_average: 7.4,
-        vote_count: 116,
-        character: 'Yang',
-        credit_id: '5e4a08951e92250015c34813',
-        episode_count: 1,
-        media_type: 'tv',
-      },
-      {
-        adult: false,
-        backdrop_path: '/dAepkmD4vdfhS82r2OIqF1nwGR5.jpg',
-        genre_ids: [10759, 18, 80, 9648],
-        id: 17610,
-        origin_country: ['US'],
-        original_language: 'en',
-        original_name: 'NCIS: Los Angeles',
-        overview:
-          'The exploits of the Los Angeles–based Office of Special Projects (OSP), an elite division of the Naval Criminal Investigative Service that specializes in undercover assignments.',
-        popularity: 14.789,
-        poster_path: '/TIIgcznwNfNr3KOZvxn26eKV99.jpg',
-        first_air_date: '2009-09-22',
-        name: 'NCIS: Los Angeles',
-        vote_average: 7.5,
-        vote_count: 1171,
-        character: 'Older Afghan Man',
-        credit_id: '5ea6e2af5a4690002512f1cf',
-        episode_count: 1,
-        media_type: 'tv',
-      },
-      {
-        adult: false,
-        backdrop_path: null,
-        genre_ids: [18],
-        id: 15215,
-        origin_country: ['US'],
-        original_language: 'en',
-        original_name: 'Brooklyn South',
-        overview:
-          'An American ensemble police drama series following the life of police officers from the 74th Precinct in southern Brooklyn, New York City.',
-        popularity: 0.98,
-        poster_path: null,
-        first_air_date: '1997-09-22',
-        name: 'Brooklyn South',
-        vote_average: 9.7,
-        vote_count: 6,
-        character: 'Tenant',
-        credit_id: '66811cd8352609d81efea828',
-        episode_count: 1,
-        media_type: 'tv',
-      },
-      {
-        adult: false,
-        backdrop_path: '/u1jUHmL3oKM48HVGmwrscdRK5hy.jpg',
-        genre_ids: [35, 10751, 10762],
-        id: 21641,
-        origin_country: ['US'],
-        original_language: 'en',
-        original_name: 'Good Luck Charlie',
-        overview:
-          "Teens PJ and Teddy and tween brother Gabe are typical kids -- that is, until their mother has another baby. The arrival of their new sister completely upends the entire household. When their mother heads back to work after Charlie's birth, it's up to the kids and their dad to keep the home fires burning -- and to keep Charlie out of trouble as she learns to sit up, crawl, walk and run. Teddy, as the older sister, makes a personalized video diary for Charlie, in each episode adding a nugget of wisdom for her baby sibling.",
-        popularity: 4.296,
-        poster_path: '/cyYwkXW1vd3YpiFVlb7y0hgIzuu.jpg',
-        first_air_date: '2010-04-04',
-        name: 'Good Luck Charlie',
-        vote_average: 7.9,
-        vote_count: 412,
-        character: 'Arnie',
-        credit_id: '5f0469cda35c8e0036213144',
-        episode_count: 1,
-        media_type: 'tv',
-      },
-      {
-        adult: false,
-        backdrop_path: '/4EQAi7r9iTo84WzyS351ssPxAAX.jpg',
-        genre_ids: [35],
-        id: 1076,
-        origin_country: ['US'],
-        original_language: 'en',
-        original_name: 'Suddenly Susan',
-        overview:
-          'Suddenly Susan is an American television sitcom. Shields plays Susan Keane, a glamorous San Francisco magazine writer who begins to adjust to being single, and who learns to be independent-minded, after being taken care of all her life.',
-        popularity: 0.755,
-        poster_path: '/AbFbrcNZFFe5azuubb55vXmL22a.jpg',
-        first_air_date: '1996-09-19',
-        name: 'Suddenly Susan',
-        vote_average: 5.7,
-        vote_count: 26,
-        character: 'Bruzzi',
-        credit_id: '66b9481bab1bdb1c0cbda1e8',
-        episode_count: 1,
-        media_type: 'tv',
-      },
-      {
-        adult: false,
-        backdrop_path: '/rIBqXNepfMUovEqDpOuMt3RcUcD.jpg',
-        genre_ids: [35],
-        id: 43227,
-        origin_country: ['US'],
-        original_language: 'en',
-        original_name: 'Guys with Kids',
-        overview:
-          'Three 30-something dads try to hold on to their youth as they face the responsibilities of having kids. Thankfully, Gary, Chris and Nick have each other to help navigate the highs and lows of fatherhood - while still trying desperately to remain dudes.',
-        popularity: 0.785,
-        poster_path: '/uSHWvVrgXbmmR8iV2UpLSWLtqs7.jpg',
-        first_air_date: '2012-09-12',
-        name: 'Guys with Kids',
-        vote_average: 5.6,
-        vote_count: 11,
-        character: 'Redondo',
-        credit_id: '66c53e4651395eadfa7136fe',
-        episode_count: 1,
-        media_type: 'tv',
-      },
-      {
-        adult: false,
-        backdrop_path: '/6rhSLEiDRWvw9MpK94KawXDz8sg.jpg',
-        genre_ids: [18, 10759, 80, 10768],
-        id: 50,
-        origin_country: ['US'],
-        original_language: 'en',
-        original_name: 'Pacific Blue',
-        overview:
-          'Pacific Blue is an American crime drama series about a team of police officers with the Santa Monica Police Department who patrolled its beaches on bicycles. The show ran for five seasons on the USA Network, from March 2, 1996 to April 9, 2000, with a total of one hundred and one episodes. Often compared as "Baywatch on bikes," the series enjoyed a popular run among the Network\'s viewers, and was popular in France, Israel, Sweden, Bulgaria, Norway, Spain, Russia, Austria, Germany, Italy, South America, Canada, Denmark, Poland, and other foreign markets.',
-        popularity: 3.097,
-        poster_path: '/lVyEixUIkSWSuUQ1RO4fQMXcXgB.jpg',
-        first_air_date: '1996-03-02',
-        name: 'Pacific Blue',
-        vote_average: 5.4,
-        vote_count: 84,
-        character: 'Cab Driver',
-        credit_id: '6703bf3e18a8b49d32138f55',
-        episode_count: 1,
-        media_type: 'tv',
-      },
-      {
-        adult: false,
-        backdrop_path: '/jHh3HpkESZVKi9pCMt5GFaC4uXx.jpg',
-        genre_ids: [35],
-        id: 64551,
-        origin_country: ['US'],
-        original_language: 'en',
-        original_name: 'Baskets',
-        overview:
-          "Chip Baskets wants to follow his dream of being a French clown—however, reality keeps interfering. Saddled with financial difficulties and facing an impenetrable language barrier, he moves back home to Bakersfield with high hopes. There, he is forced to confront his past while working as a rodeo clown and competing with his siblings for his mother's approval and affection.",
-        popularity: 3.564,
-        poster_path: '/kkbttiaCH1brriYAoBFVvNHHOcn.jpg',
-        first_air_date: '2016-01-21',
-        name: 'Baskets',
-        vote_average: 7,
-        vote_count: 135,
-        character: 'George',
-        credit_id: '6718e8cd9ff681d9e0a39469',
-        episode_count: 1,
-        media_type: 'tv',
-      },
-    ],
-    crew: [],
-    id: 116907,
-  };
+  useEffect(() => {
+    if (!personDetailsUrl) {
+      return;
+    }
 
-  return (
-    <main className="person-main">
-      <section className="person-header">
-        <header className="person-header__upper">
-          <img
-            className="person-header__image"
-            src={`https://image.tmdb.org/t/p/w500${data.profile_path}`}
-            alt={`profile image of ${data.name}`}
-          />
-          <h2 className="person-header__heading">{data.name}</h2>
-          <dl className="person-header__description-list">
-            <dt className="description-list__term">Known For</dt>
-            <dd className="description-list__desc">
-              {data.known_for_department}
-            </dd>
-            <dt className="description-list__term ">Birthday</dt>
-            <dd className="description-list__desc">
-              {formatDate(data.birthday)}
-            </dd>
-            {data.deathday && (
-              <dt className="description-list__term">Date of Death</dt>
+    console.log('useEffect called');
+    const fetchData = async () => {
+      try {
+        const personDetailsResponse = await fetch(personDetailsUrl, options);
+        if (!personDetailsResponse.ok) {
+          throw new Error(
+            `Failed HTTPS request with status: ${personDetailsResponse.status}`,
+          );
+        }
+
+        const fetchedPersonDetailsData = await personDetailsResponse.json();
+        setPersonData(fetchedPersonDetailsData);
+
+        const personCreditsResponse = await fetch(
+          `${personDetailsUrl} + /combined_credits`,
+          options,
+        );
+        if (!personCreditsResponse.ok) {
+          throw new Error(
+            'Failed HTTPS request with status: ${personDetailsResponse.status}',
+          );
+        }
+
+        const fetchedPersonCreditsData = await personCreditsResponse.json();
+
+        fetchedPersonCreditsData.cast = fetchedPersonCreditsData.cast.sort(
+          (a, b) => {
+            const firstItem =
+              a.release_date || a.first_air_date || '1900-01-01';
+            const secondItem =
+              b.release_date || b.first_air_date || '1900-01-01';
+
+            return (
+              parseInt(getReleaseYear(secondItem)) -
+              parseInt(getReleaseYear(firstItem))
+            );
+          },
+        );
+
+        fetchedPersonCreditsData.crew = fetchedPersonCreditsData.crew.sort(
+          (a, b) => {
+            const firstItem =
+              a.release_date || a.first_air_date || '1900-01-01';
+            const secondItem =
+              b.release_date || b.first_air_date || '1900-01-01';
+
+            return (
+              parseInt(getReleaseYear(secondItem)) -
+              parseInt(getReleaseYear(firstItem))
+            );
+          },
+        );
+
+        setPersonCreditsData(fetchedPersonCreditsData);
+        console.log(fetchedPersonCreditsData);
+      } catch (err) {
+        // Set error state
+      } finally {
+        // Set loading state
+      }
+    };
+
+    fetchData();
+  }, [id]);
+
+  const crewCreditsObj =
+    personCreditsData &&
+    personCreditsData.crew.reduce((acc, current) => {
+      if (!acc[current.department]) {
+        acc[current.department] = [];
+      }
+
+      acc[current.department].push(current);
+      return acc;
+    }, {});
+
+  // Components
+  function CrewCredit({ data }) {
+    return (
+      <article className="credit">
+        <Link to={`/${data.media_type}/${data.id}`}>
+          <div className="credit-container-left">
+            <img
+              className="credit__image"
+              src={`https://image.tmdb.org/t/p/w500${data.poster_path}`}
+              alt={`${data.media_type} poster of ${data.title}`}
+            />
+            <h5 className="credit__title">
+              {data.title ? data.title : data.name}
+            </h5>
+            <span className="credit__rating">
+              <FontAwesomeIcon icon={faStar} className="fa-star-icon" />
+              {data.vote_average ? data.vote_average : 'n/a'}
+            </span>
+            <p className="credit__type">
+              {data.media_type === 'movie' ? 'Movie' : 'TV Series'}
+            </p>
+          </div>
+          <div className="credit-container-right">
+            {data.release_date && (
+              <time date={getReleaseYear(data.release_date)}>
+                {getReleaseYear(data.release_date)}
+              </time>
             )}
-            {data.deathday && (
-              <dd className="descdescription-list__desc">
-                {formatDate(data.deathday)}
+            <p>{data.job}</p>
+          </div>
+        </Link>
+      </article>
+    );
+  }
+
+  function ActingCredit({ data }) {
+    return (
+      <article className="credit">
+        <Link to={`/${data.media_type}/${data.id}`}>
+          <div className="credit-container-left">
+            <img
+              className="credit__image"
+              src={`https://image.tmdb.org/t/p/w500${data.poster_path}`}
+              alt={`${data.media_type} poster of ${data.title}`}
+            />
+            <h5 className="credit__title">
+              {data.title ? data.title : data.name}
+            </h5>
+            <span className="credit__rating">
+              <FontAwesomeIcon icon={faStar} className="fa-star-icon" />
+              {data.vote_average ? data.vote_average.toFixed(1) : 'n/a'}
+            </span>
+            <p className="credit__type">
+              {data.media_type === 'movie' ? 'Movie' : 'TV Series'}
+            </p>
+            <p className="credit__character">{data.character}</p>
+          </div>
+          <div className="credit-container-right">
+            {data.first_air_date && (
+              <time date={getReleaseYear(data.first_air_date)}>
+                {getReleaseYear(data.first_air_date)}
+              </time>
+            )}
+            {data.release_date && (
+              <time date={getReleaseYear(data.release_date)}>
+                {getReleaseYear(data.release_date)}
+              </time>
+            )}
+
+            {data.episode_count && <p>{data.episode_count} episode(s)</p>}
+          </div>
+        </Link>
+      </article>
+    );
+  }
+
+  function renderCrewCredits(obj) {
+    console.log(obj);
+
+    return Object.entries(obj).map(([department, array]) => {
+      return (
+        <Fragment key={department}>
+          <h4>{department}</h4>
+          <h5>{obj.id}</h5>
+          {array.map((obj, index) => {
+            return <CrewCredit key={`crew-${obj.id}-${index}`} data={obj} />;
+          })}
+        </Fragment>
+      );
+    });
+  }
+
+  if (personData) {
+    return (
+      <main className="person-main">
+        <section className="person-header">
+          <header className="person-header__upper">
+            <img
+              className="person-header__image"
+              src={`https://image.tmdb.org/t/p/w500${personData.profile_path}`}
+              alt={`profile image of ${personData.name}`}
+            />
+            <h2 className="person-header__heading">{personData.name}</h2>
+            <dl className="person-header__description-list">
+              <dt className="description-list__term">Known For</dt>
+              <dd className="description-list__desc">
+                {personData.known_for_department}
               </dd>
-            )}
-            <dt className="description-list__term ">Place of Birth</dt>
-            <dd className="description-list__desc">{data.place_of_birth}</dd>
-            <dt className="description-list__term ">Also Known As</dt>
-            <dd className="description-list__desc">
-              {data.also_known_as.map(name => {
-                return <p>{name}</p>;
-              })}
-            </dd>
-          </dl>
-        </header>
-        <p className="person-bio">{data.biography}</p>
-      </section>
-    </main>
-  );
+              <dt className="description-list__term ">Birthday</dt>
+              <dd className="description-list__desc">
+                {formatDate(personData.birthday)}
+              </dd>
+              {personData.deathday && (
+                <>
+                  <dt className="description-list__term">Date of Death</dt>
+                  <dd className="descdescription-list__desc">
+                    {formatDate(personData.deathday)}
+                  </dd>
+                </>
+              )}
+              <dt className="description-list__term ">Place of Birth</dt>
+              <dd className="description-list__desc">
+                {personData.place_of_birth}
+              </dd>
+              <dt className="description-list__term ">Also Known As</dt>
+              <dd className="description-list__desc">
+                {personData.also_known_as.map((name, index) => {
+                  return <p key={`${name}-${index}`}>{name}</p>;
+                })}
+              </dd>
+            </dl>
+          </header>
+          <p className="person-bio">{personData.biography}</p>
+        </section>
+        <section className="credits-container">
+          <h3>Credits</h3>
+          <div role="group">
+            <h4>Acting</h4>
+            {personCreditsData &&
+              personCreditsData.cast.map((credit, index) => (
+                <ActingCredit
+                  key={`acting-${credit.id}-${index}`}
+                  data={credit}
+                />
+              ))}
+          </div>
+          <div role="group">
+            {crewCreditsObj && renderCrewCredits(crewCreditsObj)}
+          </div>
+        </section>
+      </main>
+    );
+  }
 }
