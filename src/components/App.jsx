@@ -9,6 +9,7 @@ import './styles/searchresult.css';
 import MovieLayout from './layouts/MovieLayout';
 import MovieDetail from '../components/detail/MovieDetail';
 import TVLayout from '../components/layouts/TVLayout';
+import PersonLayout from './layouts/PersonLayout';
 import TVDetail from '../components/detail/TVDetail';
 import CastAndCrew from './castandcrew/CastAndCrew';
 
@@ -26,7 +27,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<MainLayout />}>
             <Route index element={<Home />} />
-            <Route path="movies/:id" element={<MovieLayout />}>
+            <Route path="movie/:id" element={<MovieLayout />}>
               <Route index element={<MovieDetail />} />
               <Route path="castandcrew" element={<CastAndCrew />} />
             </Route>
@@ -34,6 +35,7 @@ export default function App() {
               <Route index element={<TVDetail />} />
               <Route path="castandcrew" element={<CastAndCrew />} />
             </Route>
+            <Route path="person/:id" element={<PersonLayout />} />
             <Route path="watchlist" element={<Watchlist />} />
             <Route path="account" element={<Account />} />
           </Route>

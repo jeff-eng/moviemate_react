@@ -3,6 +3,11 @@ import { Outlet, useParams, NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock } from '@fortawesome/free-regular-svg-icons';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
+import {
+  getReleaseYear,
+  formatDate,
+  createRuntimeString,
+} from '../../functions/function';
 import '../detail/detail.css';
 
 export default function MovieLayout() {
@@ -77,26 +82,6 @@ export default function MovieLayout() {
     fetchCastAndCrewData();
   }, [id]);
 
-  function formatDate(dateString) {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
-  }
-
-  function getReleaseYear(dateString) {
-    return dateString.split('-')[0];
-  }
-
-  function createRuntimeString(minutes) {
-    const hours = Math.floor(minutes / 60);
-    const min = minutes % 60;
-
-    return `${hours}h ${min}m`;
-  }
-
   const styles = movieData
     ? {
         backgroundImage: `linear-gradient(rgba(2, 8, 22, 0.8),
@@ -139,9 +124,9 @@ export default function MovieLayout() {
                   {createRuntimeString(movieData.runtime)}
                 </span>
               </div>
-              <dl>
-                <dt className="release-date__heading">Release Date</dt>
-                <dd className="release-date__date">
+              <dl className="description-list">
+                <dt className="description-list__term">Release Date</dt>
+                <dd className="description-list__desc">
                   {formatDate(movieData.release_date)}
                 </dd>
               </dl>
@@ -160,7 +145,7 @@ export default function MovieLayout() {
         <section className="movie-info">
           <nav className="details__nav">
             <NavLink
-              to={`/movies/${id}`}
+              to={`/movie/${id}`}
               end
               style={({ isActive }) => (isActive ? activeStyles : null)}
               className="navlink-tab"
@@ -168,7 +153,7 @@ export default function MovieLayout() {
               Details
             </NavLink>
             <NavLink
-              to={`/movies/${id}/castandcrew`}
+              to={`/movie/${id}/castandcrew`}
               style={({ isActive }) => (isActive ? activeStyles : null)}
               className="navlink-tab"
             >
