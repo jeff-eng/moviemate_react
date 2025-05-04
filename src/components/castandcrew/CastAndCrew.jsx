@@ -56,6 +56,7 @@ export default function CastAndCrew() {
                         ? `https://image.tmdb.org/t/p/w500/${member.profile_path}`
                         : actorPlaceholder
                     }
+                    alt={`profile photo of ${member.name}`}
                   />
                   <p className="cast__name-text">{member.name}</p>
                   <p className="cast__character-text">{member.character}</p>
