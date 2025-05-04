@@ -102,6 +102,7 @@ export default function TVLayout() {
             <img
               className="movie-header__poster"
               src={`https://image.tmdb.org/t/p/w500${TVData.poster_path}`}
+              alt={`Poster of ${TVData.name} TV series`}
             />
             <div className="header-info-container">
               <h2 className="movie-header__title">{TVData.name}</h2>
