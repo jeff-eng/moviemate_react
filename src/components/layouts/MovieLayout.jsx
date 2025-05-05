@@ -108,6 +108,7 @@ export default function MovieLayout() {
             <img
               className="movie-header__poster"
               src={`https://image.tmdb.org/t/p/w500${movieData.poster_path}`}
+              alt={`Movie poster for ${movieData.title}`}
             />
             <div className="header-info-container">
               <h2 className="movie-header__title">
