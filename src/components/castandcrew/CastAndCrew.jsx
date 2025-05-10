@@ -1,4 +1,4 @@
-import { useOutletContext } from 'react-router-dom';
+import { Link, useOutletContext } from 'react-router-dom';
 import actorPlaceholder from '../../assets/icons8-actor-100.png';
 
 export default function CastAndCrew() {
@@ -47,20 +47,22 @@ export default function CastAndCrew() {
           <div className="cast">
             {castAndCrewData.cast.map(member => {
               return (
-                <article className="cast-card" key={member.id}>
-                  <img
-                    loading="lazy"
-                    className="cast-card__image"
-                    src={
-                      member.profile_path
-                        ? `https://image.tmdb.org/t/p/w500/${member.profile_path}`
-                        : actorPlaceholder
-                    }
-                    alt={`profile photo of ${member.name}`}
-                  />
-                  <p className="cast__name-text">{member.name}</p>
-                  <p className="cast__character-text">{member.character}</p>
-                </article>
+                <Link to={`/person/${member.id}`}>
+                  <article className="cast-card" key={member.id}>
+                    <img
+                      loading="lazy"
+                      className="cast-card__image"
+                      src={
+                        member.profile_path
+                          ? `https://image.tmdb.org/t/p/w500/${member.profile_path}`
+                          : actorPlaceholder
+                      }
+                      alt={`profile photo of ${member.name}`}
+                    />
+                    <p className="cast__name-text">{member.name}</p>
+                    <p className="cast__character-text">{member.character}</p>
+                  </article>
+                </Link>
               );
             })}
           </div>
