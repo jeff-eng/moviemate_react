@@ -44,7 +44,7 @@
 .movie-stats {
   display: flex;
   gap: 1em;
-  color: #84a7f2;
+  color: var(--primary-color);
 }
 
 .description-list {
@@ -78,7 +78,7 @@
 }
 
 .header-info-container {
-  color: #84a7f2;
+  color: var(--primary-color);
   display: flex;
   flex-direction: column;
   gap: 1em;
@@ -176,7 +176,7 @@
   margin-left: 0.25em;
 
   .crew-section__dept {
-    color: #84a7f2;
+    color: var(--primary-color);
   }
 
   .crewmembers-container {
@@ -192,7 +192,7 @@
   }
 
   .crew-section__job {
-    color: #84a7f2;
+    color: var(--primary-color);
   }
 }
 
