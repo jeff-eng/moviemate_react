@@ -5,13 +5,15 @@
   display: flex;
   gap: clamp(1em, 2em, 3em);
   position: fixed;
-  bottom: 5%;
+  bottom: 2%;
   left: 50%;
   transform: translateX(-50%);
   padding: 1em 2em;
-  background-color: black;
+  background-color: rgba(32, 31, 31, 0.7);
   height: var(--height);
   border-radius: var(--radius);
+  backdrop-filter: blur(0.5em);
+  transition: bottom 0.3s ease-in-out;
 
   a {
     text-decoration: none;
@@ -47,4 +49,8 @@
 .nav__link--active .nav__icon,
 .nav__link--active .nav__label {
   color: #e8195d;
+}
+
+.hide-nav {
+  bottom: -25%;
 }
