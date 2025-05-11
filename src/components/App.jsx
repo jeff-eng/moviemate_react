@@ -6,6 +6,7 @@ import Account from '../pages/account/Account';
 import MainLayout from './layouts/MainLayout';
 import './App.css';
 import './styles/searchresult.css';
+import './styles/color-variables.css';
 import MovieLayout from './layouts/MovieLayout';
 import MovieDetail from '../components/detail/MovieDetail';
 import TVLayout from '../components/layouts/TVLayout';

@@ -44,7 +44,7 @@
 .movie-stats {
   display: flex;
   gap: 1em;
-  color: #84a7f2;
+  color: var(--primary-color);
 }
 
 .description-list {
@@ -78,7 +78,7 @@
 }
 
 .header-info-container {
-  color: #84a7f2;
+  color: var(--primary-color);
   display: flex;
   flex-direction: column;
   gap: 1em;
@@ -140,20 +140,23 @@
   overflow-x: scroll;
   cursor: all-scroll;
 
-  & .cast__name-text,
-  .cast__character-text {
-    font-size: 0.8rem;
-    text-align: center;
-  }
+  .cast-card {
+    color: var(--text-color);
 
-  & .cast__name-text {
-    font-weight: 700;
-  }
+    & .cast__name-text,
+    .cast__character-text {
+      font-size: 0.8rem;
+      text-align: center;
+    }
 
-  & .cast__character-text {
-    color: #dce7fb;
-    opacity: 70%;
-    margin-top: 0.5em;
+    & .cast__name-text {
+      font-weight: 700;
+    }
+
+    & .cast__character-text {
+      opacity: 70%;
+      margin-top: 0.5em;
+    }
   }
 }
 
@@ -173,7 +176,7 @@
   margin-left: 0.25em;
 
   .crew-section__dept {
-    color: #84a7f2;
+    color: var(--primary-color);
   }
 
   .crewmembers-container {
@@ -189,7 +192,7 @@
   }
 
   .crew-section__job {
-    color: #84a7f2;
+    color: var(--primary-color);
   }
 }
 
@@ -224,7 +227,6 @@
   .series__season-description {
     font-size: 0.9rem;
     opacity: 75%;
-    /* font-style: italic; */
   }
 
   .series__season-year {
