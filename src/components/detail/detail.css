@@ -140,20 +140,23 @@
   overflow-x: scroll;
   cursor: all-scroll;
 
-  & .cast__name-text,
-  .cast__character-text {
-    font-size: 0.8rem;
-    text-align: center;
-  }
+  .cast-card {
+    color: var(--text-color);
 
-  & .cast__name-text {
-    font-weight: 700;
-  }
+    & .cast__name-text,
+    .cast__character-text {
+      font-size: 0.8rem;
+      text-align: center;
+    }
 
-  & .cast__character-text {
-    color: #dce7fb;
-    opacity: 70%;
-    margin-top: 0.5em;
+    & .cast__name-text {
+      font-weight: 700;
+    }
+
+    & .cast__character-text {
+      opacity: 70%;
+      margin-top: 0.5em;
+    }
   }
 }
 
@@ -224,7 +227,6 @@
   .series__season-description {
     font-size: 0.9rem;
     opacity: 75%;
-    /* font-style: italic; */
   }
 
   .series__season-year {
