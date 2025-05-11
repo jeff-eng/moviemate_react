@@ -1,6 +1,5 @@
 .header {
   display: flex;
-  /* flex-wrap: wrap; */
   justify-content: space-between;
   align-items: center;
   padding: 1.75em 1.5em;
@@ -18,14 +17,12 @@
   align-items: center;
   flex-direction: column;
 
-  /* border: 2px solid red; */
-
   .logo__image {
-    width: 100px;
-    /* border: 1px solid green; */
+    width: 80px;
   }
+
   .logo__heading {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     color: #dce7fb;
   }
 }
