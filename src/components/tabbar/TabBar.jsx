@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useEffect, useState } from 'react';
 import {
   faHouse,
   faHeart,
@@ -8,8 +9,30 @@ import {
 import './tabbar.css';
 
 export default function TabBar() {
+  const [isScrolling, setIsScrolling] = useState(false);
+
+  useEffect(() => {
+    let timeout;
+
+    const handleScroll = () => {
+      clearTimeout(timeout);
+      setIsScrolling(true);
+
+      timeout = setTimeout(() => {
+        setIsScrolling(false);
+      }, 200);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    // Cleanup function
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
-    <nav className="nav">
+    <nav className={isScrolling ? 'nav hide-nav' : 'nav'}>
       <NavLink
         to="/"
         className={({ isActive }) =>
