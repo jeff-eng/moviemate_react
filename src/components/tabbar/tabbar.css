@@ -1,6 +1,7 @@
 .nav {
   --height: 80px;
   --radius: calc(var(--height) / 2);
+  --active-color: #e8195d;
 
   display: flex;
   gap: clamp(1em, 2em, 3em);
@@ -23,7 +24,7 @@
     display: grid;
     justify-items: center;
     row-gap: 0.5em;
-    color: white;
+    color: var(--text-color);
 
     &:focus-visible {
       outline: none;
@@ -35,7 +36,7 @@
       }
     }
     &:hover {
-      color: #e8195d;
+      color: var(--active-color);
       transition: 0.25s ease-in-out;
     }
   }
@@ -48,7 +49,7 @@
 /* Active style for tab bar icon and label */
 .nav__link--active .nav__icon,
 .nav__link--active .nav__label {
-  color: #e8195d;
+  color: var(--active-color);
 }
 
 .hide-nav {
