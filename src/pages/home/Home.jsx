@@ -70,16 +70,18 @@ export default function Home() {
 
   return (
     <>
-      <search>
-        <form onSubmit={handleSubmit}>
+      <search className="search">
+        <form onSubmit={handleSubmit} className="search__form">
           <input
+            className="search__input"
+            autoComplete="off"
             type="search"
             name="query"
             placeholder="e.g. Game of Thrones"
             onChange={handleChange}
             value={searchQuery}
           />
-          <button>
+          <button className="search__button">
             <FontAwesomeIcon icon={faMagnifyingGlass} />
           </button>
         </form>
