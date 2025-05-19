@@ -28,15 +28,17 @@ search {
     border-radius: calc(var(--input-height) / 2);
     transition: width 0.7s ease;
     border: none;
+    background-color: rgb(212, 212, 212);
 
     &::placeholder {
-      color: #747272;
+      color: #252424;
     }
   }
 
   .search__input:focus {
     outline: 5px solid var(--accent-color);
     width: 280px;
+    background-color: var(--text-color);
   }
 
   @media (min-width: 500px) {
