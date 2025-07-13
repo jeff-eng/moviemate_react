@@ -1,6 +1,9 @@
 import actorPlaceholder from '../../assets/icons8-actor-100.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMasksTheater } from '@fortawesome/free-solid-svg-icons/faMasksTheater';
+import {
+  faMasksTheater,
+  faArrowRight,
+} from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 
 export default function PersonResult({ data }) {
@@ -22,7 +25,14 @@ export default function PersonResult({ data }) {
           alt={`profile photo of ${name}`}
         />
         <div className="search-result__details-container">
-          <h2 className="search-result__name">{name}</h2>
+          <h2 className="search-result__name">
+            {name}
+            <FontAwesomeIcon
+              icon={faArrowRight}
+              rotation={0}
+              className="fa-arrow-icon"
+            />
+          </h2>
           <span className="search-result__type">
             <FontAwesomeIcon icon={faMasksTheater} className="result-type" />
             {known_for_department}
