@@ -1,4 +1,4 @@
-import { faStar, faTv } from '@fortawesome/free-solid-svg-icons';
+import { faStar, faTv, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import posterPlaceholder from '../../assets/imgholdr-image.png';
 import { Link } from 'react-router-dom';
@@ -32,6 +32,11 @@ export default function TVResult({ data }) {
               {' '}
               ({releaseYear})
             </time>
+            <FontAwesomeIcon
+              icon={faArrowRight}
+              rotation={0}
+              className="fa-arrow-icon"
+            />
           </h2>
           <div>
             <span className="search-result__type">
